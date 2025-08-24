@@ -1,22 +1,31 @@
+#include <string>
 #include "SceneTitle.h"
 #include "Globals.h"
+#include "VectorFont.h"
 
 SceneTitle::SceneTitle() : Scene()
 {
-    up = down = left = right = false;
-    // Square dimensions: Half of the min(SCREEN_WIDTH, SCREEN_HEIGHT)
-    squareRect.w = MIN(SCREEN_WIDTH, SCREEN_HEIGHT) / 2;
-    squareRect.h = MIN(SCREEN_WIDTH, SCREEN_HEIGHT) / 2;
+    up = down = left = right = false;    
+    font = new VectorFont();
 
-    // Square position: In the middle of the screen
-    squareRect.x = SCREEN_WIDTH / 2 - squareRect.w / 2;
-    squareRect.y = SCREEN_HEIGHT / 2 - squareRect.h / 2;
+    menuItems.clear();
+    menuItems.push_back("PLAY");
+#ifndef __EMSCRIPTEN__
+    menuItems.push_back("EXIT");
+#endif
+}
 
+SceneTitle::~SceneTitle()
+{
+    menuItems.clear();
+    delete font;
 }
 
 Scene* SceneTitle::Update(float dt)
 {
     SDL_Event e;
+
+    up = down = left = right = false;
 
     // Wait indefinitely for the next available event
     while (SDL_PollEvent(&e))
@@ -36,24 +45,14 @@ Scene* SceneTitle::Update(float dt)
                 running = false;
 #endif
                 break;
-            case SDLK_UP:
-                up = false;
+            case SDLK_RETURN:
+            case SDLK_RETURN2:
+            case SDLK_KP_ENTER:
+                if (menuItems[menuIndex] == "EXIT")
+                {
+                    running = false;
+                }
                 break;
-            case SDLK_DOWN:
-                down = false;
-                break;
-            case SDLK_LEFT:
-                left = false;
-                break;
-            case SDLK_RIGHT:
-                right = false;
-                break;
-            }
-        }
-        else if (e.type == SDL_KEYDOWN)
-        {
-            switch (e.key.keysym.sym)
-            {
             case SDLK_UP:
                 up = true;
                 break;
@@ -71,30 +70,60 @@ Scene* SceneTitle::Update(float dt)
     }
 
     if (up)
-        squareRect.y = MAX(0, squareRect.y - 5);
+        menuIndex = MAX(0, menuIndex - 1);
+        
     if (down)
-        squareRect.y = MIN(SCREEN_HEIGHT - squareRect.h - 1, squareRect.y + 5);
-    if (left)
-        squareRect.x = MAX(0, squareRect.x - 5);
-    if (right)
-        squareRect.x = MIN(SCREEN_WIDTH - squareRect.w - 1, squareRect.x + 5);
+        menuIndex = MIN(menuItems.size() - 1, menuIndex + 1);
 
     return this;
 }
 
 void SceneTitle::Draw()
 {
-    // Initialize renderer color white for the background
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
     // Clear screen
+    SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, BLACK.a);
     SDL_RenderClear(renderer);
 
-    // Set renderer color red to draw the square
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
+    SDL_SetRenderDrawColor(renderer, WHITE.r, WHITE.g, WHITE.b, WHITE.a);
+    font->Construct(5.0, 5.0);
+    std::string message = "VECTOR STORM";
+    int width, height;
+    font->MeasureText(message, &width, &height);
+    int x = (SCREEN_WIDTH - width) / 2;
+    int y = (SCREEN_HEIGHT - height) / 2;
 
-    // Draw filled square
-    SDL_RenderFillRect(renderer, &squareRect);
+    // Draw it over a 4x4 area to make it bold
+    for (int j = -1; j < 2; j++)
+        for(int i = -1; i < 2; i++)
+    font->DrawText(message, x + i, y + j, WHITE);
+
+    y += height;
+
+    font->Construct(3.0, 3.0);
+
+    for(int i = 0; i < menuItems.size(); i++)
+    {
+        font->MeasureText(menuItems[i], &width, &height);
+        
+        x = (SCREEN_WIDTH - width) / 2;
+        SDL_Rect r;
+        if (i == menuIndex)
+        {
+            SDL_SetRenderDrawColor(renderer, WHITE.r, WHITE.g, WHITE.b, WHITE.a);
+            r.x = x - 16;
+            r.y = y - height + 2;
+            r.w = width + 32;
+            r.h = height + 4;
+            SDL_RenderFillRect(renderer, &r);
+            font->DrawText(menuItems[i], x, y, BLACK);
+        }
+        else
+        {
+            font->DrawText(menuItems[i], x, y, WHITE);
+        }
+        y += (height + 8);
+    }
+
 
     // Update screen
     SDL_RenderPresent(renderer);

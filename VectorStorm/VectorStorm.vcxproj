@@ -153,12 +153,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
+    <ClCompile Include="VectorFont.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneTitle.h" />
     <ClInclude Include="Utility.h" />
+    <ClInclude Include="VectorFont.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

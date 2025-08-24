@@ -15,5 +15,13 @@ extern Scene* currentScene;
 extern SDL_Window* window;
 extern SDL_Renderer* renderer;
 
+extern SDL_Color BLACK;
+extern SDL_Color WHITE;
+extern SDL_Color RED;
+extern SDL_Color GREEN;
+extern SDL_Color BLUE;
+extern SDL_Color CYAN;
+extern SDL_Color MAGENTA;
+extern SDL_Color YELLOW;
 
 #endif

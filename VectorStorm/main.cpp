@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
 #endif
 
     // Create window
-    window = SDL_CreateWindow("Basic C SDL project",
+    window = SDL_CreateWindow("Vector Storm",
         SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED,
         SCREEN_WIDTH, SCREEN_HEIGHT,
