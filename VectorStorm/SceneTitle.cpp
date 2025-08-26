@@ -1,6 +1,7 @@
 #include <string>
 #include "SceneTitle.h"
 #include "Globals.h"
+#include "Models.h"
 #include "VectorFont.h"
 
 SceneTitle::SceneTitle() : Scene()
@@ -75,6 +76,10 @@ Scene* SceneTitle::Update(float dt)
     if (down)
         menuIndex = MIN(menuItems.size() - 1, menuIndex + 1);
 
+    player.angle += (0.5 * M_PI * dt);
+    if (player.angle > (2.0 * M_PI))
+        player.angle -= (2.0 * M_PI);
+
     return this;
 }
 
@@ -124,6 +129,7 @@ void SceneTitle::Draw()
         y += (height + 8);
     }
 
+    player.Draw();
 
     // Update screen
     SDL_RenderPresent(renderer);

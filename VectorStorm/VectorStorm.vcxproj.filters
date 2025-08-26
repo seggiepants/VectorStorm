@@ -30,6 +30,9 @@
     <ClCompile Include="VectorFont.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Models.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VectorFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Models.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

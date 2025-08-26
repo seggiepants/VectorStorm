@@ -11,6 +11,7 @@
 #include "Globals.h"
 #include "Utility.h"
 #include "SceneTitle.h"
+#include "Models.h"
 
 // Event loop exit flag
 
@@ -101,7 +102,8 @@ int main(int argc, char* argv[])
                 "SDL_Error: %s\n", SDL_GetError());
         }
         else
-        {                        
+        {   
+            ModelInit();
             scenes.emplace(Scenes::SCENE_TITLE, new SceneTitle());
             currentScene = scenes[Scenes::SCENE_TITLE];
 
