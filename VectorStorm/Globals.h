@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "Utility.h"
 #include <SDL.h>
+#include <SDL_mixer.h>
 
 extern bool running;
 
@@ -23,5 +24,7 @@ extern SDL_Color BLUE;
 extern SDL_Color CYAN;
 extern SDL_Color MAGENTA;
 extern SDL_Color YELLOW;
+
+extern std::unordered_map<AudioClips, Mix_Chunk*> sfx;
 
 #endif

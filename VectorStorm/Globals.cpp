@@ -16,3 +16,5 @@ SDL_Color BLUE = { 0, 0, 255, 255 };
 SDL_Color CYAN = { 0, 255, 255, 255 };
 SDL_Color MAGENTA = { 255, 0, 255, 255 };
 SDL_Color YELLOW = { 255, 255, 0, 255 };
+
+std::unordered_map<AudioClips, Mix_Chunk*> sfx;

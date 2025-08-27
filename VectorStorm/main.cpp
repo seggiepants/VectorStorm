@@ -7,6 +7,7 @@
 #include <stdbool.h>
 
 #include <SDL.h>
+#include <SDL_mixer.h>
 
 #include "Globals.h"
 #include "Utility.h"
@@ -31,6 +32,17 @@ void shutdown()
 
     // Destroy window
     SDL_DestroyWindow(window);
+
+    // Free audio samples and close audio.
+    for (auto& iter : sfx)
+    {
+        if (iter.second != nullptr)
+        {
+            Mix_FreeChunk(iter.second);
+            iter.second = nullptr;
+        }
+    }
+    Mix_CloseAudio();
 
     // Quit SDL
     SDL_Quit();
@@ -67,7 +79,7 @@ int main(int argc, char* argv[])
 {
 
     // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
     {
         printf("SDL could not be initialized!\n"
             "SDL_Error: %s\n", SDL_GetError());
@@ -82,6 +94,20 @@ int main(int argc, char* argv[])
         return 0;
     }
 #endif
+
+    int result = Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 512);
+    if (result < 0)
+    {
+        fprintf(stderr, "Unable to open audio: %s\n", SDL_GetError());
+        exit(-1);
+    }
+
+    result = Mix_AllocateChannels(4);
+    if (result < 0)
+    {
+        fprintf(stderr, "Unable to allocate mixing channels: %s\n", SDL_GetError());
+        exit(-1);
+    }
 
     // Create window
     window = SDL_CreateWindow("Vector Storm",
@@ -106,6 +132,12 @@ int main(int argc, char* argv[])
         }
         else
         {   
+            Mix_Chunk* zap = Mix_LoadWAV("res/laserShoot.wav");
+            if (zap != nullptr)
+                sfx.emplace(AudioClips::AUDIO_ZAP, zap);
+            else
+                printf("Could not load wav file.");
+
             LevelInit();
             ModelInit();
             scenes.emplace(Scenes::SCENE_TITLE, new SceneTitle());

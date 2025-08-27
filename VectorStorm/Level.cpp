@@ -14,7 +14,7 @@ void LevelInit()
 	float centerX = SCREEN_WIDTH / 2.0;
 	float centerY = SCREEN_HEIGHT / 2.0;
 	float totalRadians = 0.0f;
-	float theta = (M_PI * 3.0) / 2.0;
+	float theta = M_PI / 2.0; 
 	float delta = (M_PI / 8.0); // 2PI/16 or 16 segments per circle.
 
 	// Level 1 = Circle
