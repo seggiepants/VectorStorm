@@ -40,6 +40,9 @@ enum Scenes
 	SCENE_GAME,
 };
 
-
+enum AudioClips
+{
+	AUDIO_ZAP,
+};
 
 #endif
