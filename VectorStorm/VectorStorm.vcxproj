@@ -150,16 +150,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Globals.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Models.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
     <ClCompile Include="VectorFont.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="Level.h" />
     <ClInclude Include="Models.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneGame.h" />
     <ClInclude Include="SceneTitle.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="VectorFont.h" />

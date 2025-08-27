@@ -6,7 +6,6 @@
 
 SceneTitle::SceneTitle() : Scene()
 {
-    up = down = left = right = false;    
     font = new VectorFont();
 
     menuItems.clear();
@@ -14,6 +13,20 @@ SceneTitle::SceneTitle() : Scene()
 #ifndef __EMSCRIPTEN__
     menuItems.push_back("EXIT");
 #endif
+    menuIndex = 0;
+    Init();
+}
+
+void SceneTitle::Init()
+{
+    up = down = left = right = false;
+
+    player.color = YELLOW;
+    player.scaleX = 10.0;
+    player.scaleY = 10.0;
+    player.x = SCREEN_WIDTH / 2;
+    player.y = 5 * (SCREEN_HEIGHT / 6);
+    player.angle = 0.0f;
 }
 
 SceneTitle::~SceneTitle()
@@ -25,6 +38,7 @@ SceneTitle::~SceneTitle()
 Scene* SceneTitle::Update(float dt)
 {
     SDL_Event e;
+    Scene* scene = this;
 
     up = down = left = right = false;
 
@@ -49,7 +63,12 @@ Scene* SceneTitle::Update(float dt)
             case SDLK_RETURN:
             case SDLK_RETURN2:
             case SDLK_KP_ENTER:
-                if (menuItems[menuIndex] == "EXIT")
+                if (menuItems[menuIndex] == "PLAY")
+                {
+                    scene = scenes[Scenes::SCENE_GAME];
+                    scene->Init();
+                }
+                else if (menuItems[menuIndex] == "EXIT")
                 {
                     running = false;
                 }
@@ -80,7 +99,7 @@ Scene* SceneTitle::Update(float dt)
     if (player.angle > (2.0 * M_PI))
         player.angle -= (2.0 * M_PI);
 
-    return this;
+    return scene;
 }
 
 void SceneTitle::Draw()

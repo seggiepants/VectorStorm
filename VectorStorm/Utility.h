@@ -37,6 +37,7 @@ public:
 enum Scenes
 {
 	SCENE_TITLE,
+	SCENE_GAME,
 };
 
 

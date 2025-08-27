@@ -14,6 +14,7 @@ class SceneTitle : public Scene
 public:
 	SceneTitle();
 	~SceneTitle();
+	void Init() override;
 	Scene* Update(float dt) override;
 	void Draw() override;
 private:
