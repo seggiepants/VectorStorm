@@ -10,7 +10,9 @@
 
 #include "Globals.h"
 #include "Utility.h"
+#include "SceneGame.h"
 #include "SceneTitle.h"
+#include "Level.h"
 #include "Models.h"
 
 // Event loop exit flag
@@ -21,6 +23,7 @@ float deltaTime = 0.0;
 
 void shutdown()
 {
+    LevelDestroy();
     scenes.clear();
 
     // Destroy renderer
@@ -103,9 +106,12 @@ int main(int argc, char* argv[])
         }
         else
         {   
+            LevelInit();
             ModelInit();
             scenes.emplace(Scenes::SCENE_TITLE, new SceneTitle());
+            scenes.emplace(Scenes::SCENE_GAME, new SceneGame());
             currentScene = scenes[Scenes::SCENE_TITLE];
+            currentScene->Init();
 
             running = true;
 
