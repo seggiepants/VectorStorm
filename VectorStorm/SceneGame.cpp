@@ -100,6 +100,20 @@ Scene* SceneGame::Update(float dt)
                 scene = scenes[Scenes::SCENE_TITLE];
                 scene->Init();
                 break;
+            case SDLK_PAGEUP:
+                levelIdx--;
+                if (levelIdx < 0)
+                    levelIdx = levels.size() - 1;
+                segmentIdx = 0;
+                PlacePlayer();
+                break;
+            case SDLK_PAGEDOWN:
+                levelIdx++;
+                if (levelIdx >= levels.size())
+                    levelIdx = 0;
+                segmentIdx = 0;
+                PlacePlayer();
+                break;
             case SDLK_SPACE:
                 fire = false;
                 break;
