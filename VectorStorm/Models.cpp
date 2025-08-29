@@ -1,6 +1,7 @@
 #include "Models.h"
 
 Model player;
+Model tanker;
 
 Model::Model()
 {
@@ -52,8 +53,7 @@ SDL_Vertex Model::ProjectPoint(Point2Df point)
 }
 
 void ModelInit()
-{
-	Point2Df a = { 0.0, 5.0 };
+{	
 	player.points = {
 		{-2.5, -4.5}, 
 		{-7.5, 0.5}, 
@@ -82,4 +82,28 @@ void ModelInit()
 	player.scaleX = 10.0;
 	player.scaleY = 10.0;
 	player.y = 5 * (SCREEN_HEIGHT / 6);
+
+	tanker.points = {
+		{0, -8},
+		{-8, 0},
+		{0, 8},
+		{8, 0},
+		{0, -2},
+		{-2, 0},
+		{0, 2},
+		{2, 0}
+	};
+
+	tanker.triangles = {
+		{0, 4, 3},
+		{7, 2, 3},
+		{1, 2, 6},
+		{0, 1, 5}
+	};
+
+	tanker.color = MAGENTA;
+	tanker.scaleX = 2.0;
+	tanker.scaleY = 2.0;
+	tanker.x = (SCREEN_WIDTH / 2);
+	tanker.y = (SCREEN_HEIGHT / 2);
 }

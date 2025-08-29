@@ -30,6 +30,10 @@ Level* GenerateCircle()
 		}
 	}
 	l->color = BLUE;
+	for (int i = 0; i < 20; i++)
+	{
+		l->enemyList.push_back(std::tuple<float, char>(1.5 * (float)i, 'T'));
+	}
 
 	return l;
 }
@@ -84,6 +88,10 @@ Level* GenerateSquare()
 	l->pointsInner.push_back(Point2Df{ centerX + offsetX + innerStepX, centerY + offsetY + innerSize });
 
 	l->color = BLUE;
+	for (int i = 0; i < 20; i++)
+	{
+		l->enemyList.push_back(std::tuple<float, char>(0.75 * i, 'T'));
+	}
 
 	return l;
 }
@@ -160,6 +168,10 @@ Level* GenerateCross()
 	l->pointsInner.push_back(Point2Df{ centerX + offsetX + innerStepX, centerY + offsetY + innerSize });
 
 	l->color = BLUE;
+	for (int i = 0; i < 20; i++)
+	{
+		l->enemyList.push_back(std::tuple<float, char>(0.75 * i, 'T'));
+	}
 
 	return l;
 }
@@ -302,6 +314,10 @@ Level* GenerateBowTie()
 	l->pointsInner.push_back(Point2Df{ innerCurrentX, innerCurrentY });
 
 	l->color = BLUE;
+	for (int i = 0; i < 20; i++)
+	{
+		l->enemyList.push_back(std::tuple<float, char>(0.75 * i, 'T'));
+	}
 
 	return l;
 }
@@ -326,4 +342,79 @@ void LevelDestroy()
 	for (Level* level : levels)
 		delete level;
 	levels.clear();
+}
+
+Level::Level()
+{
+}
+
+Level::~Level()
+{
+	enemyList.clear();
+}
+
+void Level::Update(float dt)
+{
+	levelTime += dt;
+}
+
+void Level::Draw()
+{
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+
+	SDL_RenderDrawLine(renderer, pointsInner[0].x, pointsInner[0].y, points[0].x, points[0].y);
+	if (closedShape)
+	{
+		SDL_RenderDrawLine(renderer, pointsInner[pointsInner.size() - 1].x, pointsInner[pointsInner.size() - 1].y, pointsInner[0].x, pointsInner[0].y);
+		SDL_RenderDrawLine(renderer, points[points.size() - 1].x, points[points.size() - 1].y, points[0].x, points[0].y);
+	}
+	for (int i = 1; i < points.size(); i++)
+	{
+		SDL_RenderDrawLine(renderer, pointsInner[i - 1].x, pointsInner[i - 1].y, pointsInner[i].x, pointsInner[i].y);
+		SDL_RenderDrawLine(renderer, pointsInner[i].x, pointsInner[i].y, points[i].x, points[i].y);
+		SDL_RenderDrawLine(renderer, points[i - 1].x, points[i - 1].y, points[i].x, points[i].y);
+	}
+}
+
+Enemy* Level::SpawnEnemy()
+{
+	if (enemyList.size() == 0)
+		return nullptr;
+	std::tuple<float, char> top = enemyList.front();
+	if (std::get<0>(top) <= levelTime)
+	{
+		enemyList.pop_front();
+		char c = std::get<1>(top);
+		int idxA = rand() % levels[levelIdx]->points.size();
+		int idxB = (idxA + 1) % levels[levelIdx]->points.size();
+		Point2Df aBegin, aEnd, bBegin, bEnd;
+		aBegin = levels[levelIdx]->pointsInner[idxA];
+		bBegin = levels[levelIdx]->pointsInner[idxB];
+		aEnd = levels[levelIdx]->points[idxA];
+		bEnd = levels[levelIdx]->points[idxB];
+		Point2Df begin, end;
+		begin.x = aBegin.x + ((bBegin.x - aBegin.x) / 2.0);
+		begin.y = aBegin.y + ((bBegin.y - aBegin.y) / 2.0);
+		end.x = aEnd.x + ((bEnd.x - aEnd.x) / 2.0);
+		end.y = aEnd.y + ((bEnd.y - aEnd.y) / 2.0);
+		switch (c)
+		{
+		case 'T':
+		{
+			Tanker* t = new Tanker();
+			
+
+			t->Init(begin, end);
+			return t;
+		}
+		default:
+			return nullptr;
+		}
+	}
+	return nullptr;
+}
+
+bool Level::AllEnemiesSpawned()
+{ 
+	return enemyList.size() <= 0;
 }

@@ -22,6 +22,7 @@ private:
 };
 
 extern Model player;
+extern Model tanker;
 
 void ModelInit();
 
