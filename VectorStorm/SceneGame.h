@@ -1,7 +1,9 @@
 #pragma once
 #ifndef __SCENE_GAME_H__
+#include <list>
 #include "Scene.h"
 #include "VectorFont.h"
+#include "Enemy.h"
 
 class SceneGame : public Scene
 {
@@ -16,6 +18,7 @@ private:
 	VectorFont* font;
 	float moveCooldown;
 	float shootCooldown;
+	std::list<Enemy*> enemies;
 	bool up, down, left, right, fire;
 	bool pause;
 	float px, py;

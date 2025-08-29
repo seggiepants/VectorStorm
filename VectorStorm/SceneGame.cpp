@@ -18,6 +18,9 @@ SceneGame::SceneGame() : Scene()
 SceneGame::~SceneGame()
 {
     delete font;
+    for (auto iter = enemies.begin(); iter != enemies.end(); iter++)
+        delete (*iter);
+    enemies.clear();
 }
 
 void SceneGame::PlacePlayer()
@@ -73,6 +76,9 @@ void SceneGame::Init()
     shootCooldown = 0;
     levelIdx = 0;
     segmentIdx = 0;
+    for (auto iter = enemies.begin(); iter != enemies.end(); iter++)
+        delete (*iter);
+    enemies.clear();
     PlacePlayer();
 }
 
@@ -196,6 +202,24 @@ Scene* SceneGame::Update(float dt)
         }
     }
 
+    std::list<Enemy*>::iterator iter = enemies.begin();
+
+    levels[levelIdx]->Update(dt);
+    // Deleting dead enemies, update the rest.
+    while (iter != enemies.end()) {
+        if ((*iter)->IsDead()) {
+            delete *iter;
+            iter = enemies.erase(iter);
+            continue;
+        }
+        else
+            (*iter)->Update(dt);
+        iter++;
+    }
+    Enemy* enemy = levels[levelIdx]->SpawnEnemy();
+    if (enemy != nullptr)
+        enemies.push_back(enemy);
+
     return scene;
 }
 
@@ -207,21 +231,8 @@ void SceneGame::Draw()
 
     Level* l = levels[levelIdx];
     int width, height;
-    SDL_SetRenderDrawColor(renderer, l->color.r, l->color.g, l->color.b, l->color.a);
 
-    SDL_RenderDrawLine(renderer, l->pointsInner[0].x, l->pointsInner[0].y, l->points[0].x, l->points[0].y);
-    if (l->closedShape)
-    {   
-        SDL_RenderDrawLine(renderer, l->pointsInner[l->pointsInner.size() - 1].x, l->pointsInner[l->pointsInner.size() - 1].y, l->pointsInner[0].x, l->pointsInner[0].y);
-        SDL_RenderDrawLine(renderer, l->points[l->points.size() - 1].x, l->points[l->points.size() - 1].y, l->points[0].x, l->points[0].y);
-    }
-    for (int i = 1; i < l->points.size(); i++)
-    {
-        SDL_RenderDrawLine(renderer, l->pointsInner[i - 1].x, l->pointsInner[i - 1].y, l->pointsInner[i].x, l->pointsInner[i].y);
-        SDL_RenderDrawLine(renderer, l->pointsInner[i].x, l->pointsInner[i].y, l->points[i].x, l->points[i].y);
-        SDL_RenderDrawLine(renderer, l->points[i - 1].x, l->points[i - 1].y, l->points[i].x, l->points[i].y);
-    }
-
+    l->Draw();
     int segment = segmentIdx - 1;
     if (segment < 0)
         segment = l->points.size() - 1;
@@ -229,6 +240,11 @@ void SceneGame::Draw()
     SDL_RenderDrawLine(renderer, l->pointsInner[segment].x, l->pointsInner[segment].y, l->points[segment].x, l->points[segment].y);
     SDL_RenderDrawLine(renderer, l->pointsInner[segmentIdx].x, l->pointsInner[segmentIdx].y, l->points[segmentIdx].x, l->points[segmentIdx].y);
 
+    for (auto iter = enemies.begin(); iter != enemies.end(); iter++)
+    {
+        if (!(*iter)->IsDead())
+            (*iter)->Draw();
+    }
 
     player.Draw();
 
