@@ -43,6 +43,10 @@ enum Scenes
 enum AudioClips
 {
 	AUDIO_ZAP,
+	ENEMY_ZAP,
+	PLAYER_DESTROY,
+	ENEMY_DESTROY,
+	EXTRA_LIFE,
 };
 
 #endif

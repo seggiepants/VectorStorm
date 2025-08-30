@@ -2,3 +2,5 @@
 x64
 wasm
 build.bat
+*.zip
+

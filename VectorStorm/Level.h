@@ -16,11 +16,13 @@ public:
 	std::vector<Point2Df> points;
 	std::vector<Point2Df> pointsInner;
 	std::list<std::tuple<float, char>> enemyList;
+	std::list<std::tuple<float, char>> enemyListBase;
 	SDL_Color color;	
 	Level();
 	~Level();
 	void Update(float dt);
 	void Draw();
+	void Init();
 	Enemy* SpawnEnemy();
 	bool AllEnemiesSpawned();
 private:

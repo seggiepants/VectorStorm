@@ -9,6 +9,8 @@ SOURCES += Level.cpp
 SOURCES += Models.cpp
 SOURCES += Enemy.cpp
 SOURCES += Tanker.cpp
+SOURCES += PlayerShot.cpp
+SOURCES += EnemyShot.cpp
 HEADERS = Globals.h 
 HEADERS += Scene.h 
 HEADERS += SceneGame.h
@@ -18,7 +20,10 @@ HEADERS += VectorFont.h
 HEADERS += Level.h
 HEADERS += Models.h
 HEADERS += Enemy.h
+HEADERS += EnemyShot.h
 HEADERS += Tanker.h
+HEADERS += Shot.h
+HEADERS += PlayerShot.h
 
 EXE = VectorStorm.html
 

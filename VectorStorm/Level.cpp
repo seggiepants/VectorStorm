@@ -32,7 +32,7 @@ Level* GenerateCircle()
 	l->color = BLUE;
 	for (int i = 0; i < 20; i++)
 	{
-		l->enemyList.push_back(std::tuple<float, char>(1.5 * (float)i, 'T'));
+		l->enemyListBase.push_back(std::tuple<float, char>(1.5 * (float)i, 'T'));
 	}
 
 	return l;
@@ -90,7 +90,7 @@ Level* GenerateSquare()
 	l->color = BLUE;
 	for (int i = 0; i < 20; i++)
 	{
-		l->enemyList.push_back(std::tuple<float, char>(0.75 * i, 'T'));
+		l->enemyListBase.push_back(std::tuple<float, char>(0.75 * i, 'T'));
 	}
 
 	return l;
@@ -170,7 +170,7 @@ Level* GenerateCross()
 	l->color = BLUE;
 	for (int i = 0; i < 20; i++)
 	{
-		l->enemyList.push_back(std::tuple<float, char>(0.75 * i, 'T'));
+		l->enemyListBase.push_back(std::tuple<float, char>(0.75 * i, 'T'));
 	}
 
 	return l;
@@ -316,7 +316,7 @@ Level* GenerateBowTie()
 	l->color = BLUE;
 	for (int i = 0; i < 20; i++)
 	{
-		l->enemyList.push_back(std::tuple<float, char>(0.75 * i, 'T'));
+		l->enemyListBase.push_back(std::tuple<float, char>(0.75 * i, 'T'));
 	}
 
 	return l;
@@ -346,11 +346,23 @@ void LevelDestroy()
 
 Level::Level()
 {
+	closedShape = false;
+	color = WHITE;
+	levelTime = 0.0f;
+}
+
+void Level::Init()
+{
+	enemyList.clear();
+	for (auto& t : enemyListBase)
+		enemyList.push_back({ std::get<0>(t), std::get<1>(t) });
+	levelTime = 0;
 }
 
 Level::~Level()
-{
+{	
 	enemyList.clear();
+	enemyListBase.clear();
 }
 
 void Level::Update(float dt)
@@ -385,26 +397,14 @@ Enemy* Level::SpawnEnemy()
 	{
 		enemyList.pop_front();
 		char c = std::get<1>(top);
-		int idxA = rand() % levels[levelIdx]->points.size();
-		int idxB = (idxA + 1) % levels[levelIdx]->points.size();
-		Point2Df aBegin, aEnd, bBegin, bEnd;
-		aBegin = levels[levelIdx]->pointsInner[idxA];
-		bBegin = levels[levelIdx]->pointsInner[idxB];
-		aEnd = levels[levelIdx]->points[idxA];
-		bEnd = levels[levelIdx]->points[idxB];
-		Point2Df begin, end;
-		begin.x = aBegin.x + ((bBegin.x - aBegin.x) / 2.0);
-		begin.y = aBegin.y + ((bBegin.y - aBegin.y) / 2.0);
-		end.x = aEnd.x + ((bEnd.x - aEnd.x) / 2.0);
-		end.y = aEnd.y + ((bEnd.y - aEnd.y) / 2.0);
+		int idx = rand() % levels[levelIdx]->points.size();
+		
 		switch (c)
 		{
 		case 'T':
 		{
-			Tanker* t = new Tanker();
-			
-
-			t->Init(begin, end);
+			Tanker* t = new Tanker();			
+			t->Init(idx);
 			return t;
 		}
 		default:

@@ -67,6 +67,8 @@ static void loop(void)
     {
         Scene* next = currentScene->Update(deltaTime);
         currentScene->Draw();
+        if (currentScene != next)
+            next->Init();
         currentScene = next;
     }
     
@@ -135,6 +137,30 @@ int main(int argc, char* argv[])
             Mix_Chunk* zap = Mix_LoadWAV("res/laserShoot.wav");
             if (zap != nullptr)
                 sfx.emplace(AudioClips::AUDIO_ZAP, zap);
+            else
+                printf("Could not load wav file.");
+
+            zap = Mix_LoadWAV("res/enemyShoot.wav");
+            if (zap != nullptr)
+                sfx.emplace(AudioClips::ENEMY_ZAP, zap);
+            else
+                printf("Could not load wav file.");
+
+            zap = Mix_LoadWAV("res/playerExplosion.wav");
+            if (zap != nullptr)
+                sfx.emplace(AudioClips::PLAYER_DESTROY, zap);
+            else
+                printf("Could not load wav file.");
+
+            zap = Mix_LoadWAV("res/enemyExplosion.wav");
+            if (zap != nullptr)
+                sfx.emplace(AudioClips::ENEMY_DESTROY, zap);
+            else
+                printf("Could not load wav file.");
+
+            zap = Mix_LoadWAV("res/extraLife.wav");
+            if (zap != nullptr)
+                sfx.emplace(AudioClips::EXTRA_LIFE, zap);
             else
                 printf("Could not load wav file.");
 
