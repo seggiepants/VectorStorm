@@ -2,6 +2,8 @@
 
 Model player;
 Model tanker;
+Model playerShot;
+Model enemyShot;
 
 Model::Model()
 {
@@ -52,18 +54,31 @@ SDL_Vertex Model::ProjectPoint(Point2Df point)
 	return SDL_Vertex{ SDL_FPoint{x, y}, color };
 }
 
+float Model::GetRadius()
+{
+	float radius = 0.001f;
+	for(Point2Df point : player.points)
+	{
+		if (abs(point.x) > radius)
+			radius = abs(point.x);
+		if (abs(point.y) > radius)
+			radius = abs(point.y);
+	}
+	return radius * (scaleX > scaleY ? scaleX : scaleY);
+}
+
 void ModelInit()
-{	
+{
 	player.points = {
-		{-2.5, -4.5}, 
-		{-7.5, 0.5}, 
-		{-0.5, 4.5}, 
-		{0.5, 4.5}, 
-		{7.5, 0.5}, 
-		{2.5, -4.5}, 
-		{3.5, -0.5}, 
-		{0.5, 1.5}, 
-		{-0.5, 1.5}, 
+		{-2.5, -4.5},
+		{-7.5, 0.5},
+		{-0.5, 4.5},
+		{0.5, 4.5},
+		{7.5, 0.5},
+		{2.5, -4.5},
+		{3.5, -0.5},
+		{0.5, 1.5},
+		{-0.5, 1.5},
 		{-3.5, -0.5},
 	};
 
@@ -106,4 +121,69 @@ void ModelInit()
 	tanker.scaleY = 2.0;
 	tanker.x = (SCREEN_WIDTH / 2);
 	tanker.y = (SCREEN_HEIGHT / 2);
+
+	playerShot.points = {
+		{0, -1.5},
+		{-1.4, -1.4},
+		{-1.4, 1.4},
+		{0, 1.5},
+		{1.4, 1.4},
+		{1.4, -1.4}
+	};
+
+	playerShot.triangles = {
+		{0, 1, 4},
+		{1, 4, 5},
+		{1, 2, 4},
+		{2, 3, 4}
+	};
+
+	playerShot.color = YELLOW;
+	playerShot.scaleX = 2.0;
+	playerShot.scaleY = 2.0;
+	playerShot.x = (SCREEN_WIDTH / 2);
+	playerShot.y = (SCREEN_HEIGHT / 2);
+
+	enemyShot.points = {
+		{0, -1},
+		{-1, 0},
+		{0, 1},
+		{1, 0},
+		{-2, -2},
+		{-2, -1},
+		{-1, -1},
+		{-1, -2},
+		{-2, 1},
+		{-2, 2},
+		{-1, 2},
+		{-1, 1},
+		{1, 1},
+		{1, 2},
+		{2, 2},
+		{2, 1},
+		{1, -2},
+		{1, -1},
+		{2, -1},
+		{2, -2}
+	};
+
+	enemyShot.triangles = {
+		{0, 1, 2},
+		{0, 2, 3},
+		{4, 5, 6},
+		{4, 6, 7},
+		{8, 9, 10},
+		{8, 10, 11},
+		{12, 13, 14},
+		{12, 14, 15},
+		{16, 17, 18},
+		{16, 18, 19}
+	};
+	enemyShot.color = WHITE;
+	enemyShot.scaleX = 2.0;
+	enemyShot.scaleY = 2.0;
+	enemyShot.x = (SCREEN_WIDTH / 2);
+	enemyShot.y = (SCREEN_HEIGHT / 2);
+
+
 }
