@@ -41,6 +41,7 @@ Scene* SceneTitle::Update(float dt)
     Scene* scene = this;
 
     up = down = left = right = false;
+    bool fire = false;
 
     // Wait indefinitely for the next available event
     while (SDL_PollEvent(&e))
@@ -50,6 +51,93 @@ Scene* SceneTitle::Update(float dt)
         if (e.type == SDL_QUIT)
         {
             running = false;
+        }
+        /*
+        else if (e.type == SDL_CONTROLLERDEVICEADDED)
+        {
+
+        }
+        else if (e.type == SDL_CONTROLLERDEVICEREMOVED)
+        {
+
+        }
+        */
+        else if (e.type == SDL_CONTROLLERBUTTONDOWN)
+        {
+            switch (e.cbutton.button)
+            {
+            case SDL_CONTROLLER_BUTTON_A:
+            case SDL_CONTROLLER_BUTTON_B:
+            case SDL_CONTROLLER_BUTTON_X:
+            case SDL_CONTROLLER_BUTTON_Y:
+            case SDL_CONTROLLER_BUTTON_START:
+                fire = true;
+                break;
+            case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+                left = true;
+                break;
+            case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+                right = true;
+                break;
+            case SDL_CONTROLLER_BUTTON_DPAD_UP:
+                up = true;
+                break;
+            case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+                down = true;
+                break;
+            }
+        }
+        else if (e.type == SDL_CONTROLLERBUTTONUP)
+        {
+            switch (e.cbutton.button)
+            {
+            case SDL_CONTROLLER_BUTTON_A:
+            case SDL_CONTROLLER_BUTTON_B:
+            case SDL_CONTROLLER_BUTTON_X:
+            case SDL_CONTROLLER_BUTTON_Y:
+            case SDL_CONTROLLER_BUTTON_START:
+                fire = false;
+                break;
+            case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+                left = false;
+                break;
+            case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+                right = false;
+                break;
+            case SDL_CONTROLLER_BUTTON_DPAD_UP:
+                up = false;
+                break;
+            case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+                down = false;
+                break;
+            case SDL_CONTROLLER_BUTTON_BACK:
+                running = false;
+                break;
+            }
+        }
+        else if (e.type == SDL_CONTROLLERAXISMOTION)
+        {
+            if (e.caxis.which == 0) // first gamepad
+            {
+                if (e.caxis.axis == 0) // X?
+                {
+                    left = false;
+                    right = false;
+                    if (e.caxis.value < -JOYSTICK_DEAD_ZONE)
+                        left = true;
+                    else if (e.caxis.value > JOYSTICK_DEAD_ZONE)
+                        right = true;
+                }
+                else if (e.caxis.axis == 1) // Y?
+                {
+                    up = false;
+                    down = false;
+                    if (e.caxis.value < -JOYSTICK_DEAD_ZONE)
+                        up = true;
+                    else if (e.caxis.value > JOYSTICK_DEAD_ZONE)
+                        down = true;
+                }
+            }
         }
         else if (e.type == SDL_KEYUP)
         {
@@ -63,15 +151,7 @@ Scene* SceneTitle::Update(float dt)
             case SDLK_RETURN:
             case SDLK_RETURN2:
             case SDLK_KP_ENTER:
-                if (menuItems[menuIndex] == "PLAY")
-                {
-                    scene = scenes[Scenes::SCENE_GAME];
-                    scene->Init();
-                }
-                else if (menuItems[menuIndex] == "EXIT")
-                {
-                    running = false;
-                }
+                fire = true;                
                 break;
             case SDLK_UP:
                 up = true;
@@ -86,6 +166,19 @@ Scene* SceneTitle::Update(float dt)
                 right = true;
                 break;
             }
+        }
+    }
+
+    if (fire)
+    {
+        if (menuItems[menuIndex] == "PLAY")
+        {
+            scene = scenes[Scenes::SCENE_GAME];
+            scene->Init();
+        }
+        else if (menuItems[menuIndex] == "EXIT")
+        {
+            running = false;
         }
     }
 

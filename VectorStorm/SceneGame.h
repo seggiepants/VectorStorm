@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "EnemyShot.h"
 #include "PlayerShot.h"
+#include "Explosion.h"
 
 class SceneGame : public Scene
 {
@@ -34,5 +35,9 @@ private:
 	bool GameOver;
 	long points;
 	long extraLifeCountdown;
+	bool paused;
+	float gameOverY;
+	std::list<Particle*> particles;
+	std::list<Explosion*> explosions;
 };
 #endif
