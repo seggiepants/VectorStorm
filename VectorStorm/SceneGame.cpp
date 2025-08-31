@@ -394,7 +394,7 @@ Scene* SceneGame::Update(float dt)
                     {
                         int pts = enemy->Hit();
                         Explosion* explosion = new Explosion();
-                        explosion->Init(enemy->x, enemy->y, MAGENTA, 0.5, 25, 2);
+                        explosion->Init(enemy->x, enemy->y, MAGENTA, 0.5, 250, 1);
                         explosions.push_back(explosion);
 
                         points += pts;
@@ -603,7 +603,7 @@ void SceneGame::PlayerHit()
     if (playerHitCooldown <= 0.0f)
     {
         Explosion* explosion = new Explosion();
-        explosion->Init(player.x, player.y, player.color, 0.5, 100, 2);
+        explosion->Init(player.x, player.y, player.color, 0.5, 250, 1);
         explosions.push_back(explosion);
         playerHitCooldown = PLAYER_HIT_COOLDOWN_MAX;
         playerLives--;
