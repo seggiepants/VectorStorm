@@ -27,6 +27,13 @@ void shutdown()
     LevelDestroy();
     scenes.clear();
 
+    //Close game controller
+    if (gamePad != nullptr)
+    {
+        SDL_GameControllerClose(gamePad);
+        gamePad = nullptr;
+    }
+
     // Destroy renderer
     SDL_DestroyRenderer(renderer);
 
@@ -81,7 +88,7 @@ int main(int argc, char* argv[])
 {
 
     // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0)
     {
         printf("SDL could not be initialized!\n"
             "SDL_Error: %s\n", SDL_GetError());
@@ -109,6 +116,21 @@ int main(int argc, char* argv[])
     {
         fprintf(stderr, "Unable to allocate mixing channels: %s\n", SDL_GetError());
         exit(-1);
+    }
+
+    //Check for joysticks
+    if (SDL_NumJoysticks() < 1)
+    {
+        fprintf(stderr, "Warning: No joysticks connected!\n");
+    }
+    else
+    {
+        //Load joystick
+        gamePad = SDL_GameControllerOpen(0);
+        if (gamePad == nullptr)
+        {
+            printf("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError());
+        }
     }
 
     // Create window

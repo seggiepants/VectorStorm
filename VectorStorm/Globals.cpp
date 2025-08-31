@@ -18,3 +18,6 @@ SDL_Color MAGENTA = { 255, 0, 255, 255 };
 SDL_Color YELLOW = { 255, 255, 0, 255 };
 
 std::unordered_map<AudioClips, Mix_Chunk*> sfx;
+
+SDL_GameController* gamePad;
+const long JOYSTICK_DEAD_ZONE = 8000;

@@ -27,4 +27,7 @@ extern SDL_Color YELLOW;
 
 extern std::unordered_map<AudioClips, Mix_Chunk*> sfx;
 
+extern SDL_GameController* gamePad;
+extern const long JOYSTICK_DEAD_ZONE;
+
 #endif

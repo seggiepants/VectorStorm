@@ -11,6 +11,7 @@ SOURCES += Enemy.cpp
 SOURCES += Tanker.cpp
 SOURCES += PlayerShot.cpp
 SOURCES += EnemyShot.cpp
+SOURCES += Explosion.cpp
 HEADERS = Globals.h 
 HEADERS += Scene.h 
 HEADERS += SceneGame.h
@@ -24,6 +25,7 @@ HEADERS += EnemyShot.h
 HEADERS += Tanker.h
 HEADERS += Shot.h
 HEADERS += PlayerShot.h
+HEADERS += Explosion.h
 
 EXE = VectorStorm.html
 
